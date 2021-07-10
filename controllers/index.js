@@ -1,4 +1,4 @@
 module.exports ={
     userController: require('./userController.js'),
-    charController: require('./charactercontroller')
+    charController: require('./charactercontroller.js')
 }
