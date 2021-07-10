@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const { UserModel } = require("../models");
+const jwt = require("jsonwebtoken");
+
 
 /*
 ============================
@@ -11,16 +13,19 @@ User Register
 
 router.post("/register", async (req, res) => {
 
-
     let { username, passwordhash } = req.body.user;
     try {
     const User = await UserModel.create({
         username,
         passwordhash
     });
+
+    let token = jwt.sign({id: User.id}, process.env.JWT_SECRET, {expiresIn: 60 * 60 * 24});
+
     res.status(201).json({
         message: "You've successfully registered! Go you!",
-        user: User
+        user: User,
+        sessionToken: token
     });
 } catch (err) {
     if (err instanceof UniqueConstraintError){
@@ -52,9 +57,13 @@ User Login
         },
     });
     if (loginUser) {
+
+        let token = jwt.sign({id: loginUser.id}, process.env.JWT_SECRET, {expiresIn: 60 * 60 * 24});
+
     res.status(200).json({
         user: loginUser,
-        message: "Hey there, welcome back!"
+        message: "Hey there, welcome back!",
+        sessionToken: token
     });
 } else {
     res.status(401).json({
