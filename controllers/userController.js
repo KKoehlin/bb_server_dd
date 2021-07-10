@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const { UserModel } = require("../models");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 
 /*
@@ -17,7 +18,7 @@ router.post("/register", async (req, res) => {
     try {
     const User = await UserModel.create({
         username,
-        passwordhash
+        passwordhash: bcrypt.hashSync(passwordhash, 13),
     });
 
     let token = jwt.sign({id: User.id}, process.env.JWT_SECRET, {expiresIn: 60 * 60 * 24});
@@ -58,6 +59,10 @@ User Login
     });
     if (loginUser) {
 
+        let passwordComparison = await bcrypt.compare(passwordhash, loginUser.passwordhash);
+
+        if (passwordComparison) {
+
         let token = jwt.sign({id: loginUser.id}, process.env.JWT_SECRET, {expiresIn: 60 * 60 * 24});
 
     res.status(200).json({
@@ -65,6 +70,7 @@ User Login
         message: "Hey there, welcome back!",
         sessionToken: token
     });
+}
 } else {
     res.status(401).json({
         message:"Login failed"
