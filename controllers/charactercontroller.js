@@ -4,7 +4,6 @@ let validateJWT = require("../middleware/validate-jwt")
 
 const { CharModel } = require("../models")
 
-
 /* Character Create */
 router.post("/create", validateJWT, async (req, res) => {
     const {name, race, gender, age, alignment, profession, trait} = req.body.character
@@ -25,7 +24,6 @@ router.post("/create", validateJWT, async (req, res) => {
     } catch (err) {
         res.status(500).json({error: err})
     }
-    // CharModel.create(characterEntry)
 })
 
 /* Get all Characters by User */
