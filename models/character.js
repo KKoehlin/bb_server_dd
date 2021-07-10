@@ -5,7 +5,7 @@ const Character = db.define('character', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        //unique: true,
+        unique: true,
     },
     race: {
         type: DataTypes.STRING,
