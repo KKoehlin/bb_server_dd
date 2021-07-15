@@ -6,10 +6,11 @@ const { CharModel } = require("../models")
 
 /* Character Create */
 router.post("/create", validateJWT, async (req, res) => {
-    const {name, race, gender, age, alignment, profession, trait} = req.body.character
+    const {name, location, race, gender, age, alignment, profession, trait} = req.body.character
     const {id} = req.user
     const characterEntry = {
         name,
+        location,
         race,
         gender,
         age,
@@ -54,9 +55,22 @@ router.get("/:id", async (req, res) => {
     }
 })
 
+/* Get Characters by Location */
+router.get("/:location", async (req, res) => {
+    const {location} = req.params;
+    try {
+        const locationResults = await CharModel.findAll({
+            where: {location: location}
+        })
+        res.status(200).json(locationResults)
+    } catch (err) {
+        res.status(500).json({error: err})
+    }
+})
+
 /* Character Update */
 router.put("/:id", validateJWT, async (req, res) => {
-    const {name, race, gender, age, alignment, profession, trait} = req.body.character
+    const {name, location, race, gender, age, alignment, profession, trait} = req.body.character
     const charId = req.params.id
     const userId = req.user.id
 
@@ -69,6 +83,7 @@ router.put("/:id", validateJWT, async (req, res) => {
 
     const updatedChar = {
         name: name,
+        location: location,
         race: race,
         gender: gender,
         age: age,
