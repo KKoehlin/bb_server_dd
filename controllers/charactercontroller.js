@@ -34,8 +34,12 @@ router.get("/", validateJWT, async (req, res) => {
         const userCharacters = await CharModel.findAll({
             where: {
                 owner: id
-            }
+            },
+            order: [
+                ['id' , 'ASC']
+            ]
         })
+        console.log(userCharacters)
         res.status(200).json(userCharacters)
     } catch (err) {
         res.status(500).json({error:err})
