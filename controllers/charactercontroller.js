@@ -39,7 +39,7 @@ router.get("/", validateJWT, async (req, res) => {
                 ['id' , 'ASC']
             ]
         })
-        console.log(userCharacters)
+        // console.log(userCharacters)
         res.status(200).json(userCharacters)
     } catch (err) {
         res.status(500).json({error:err})
