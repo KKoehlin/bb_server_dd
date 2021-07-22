@@ -7,6 +7,10 @@ const character = db.define('character', {
         allowNull: false,
         unique: true,
     },
+    location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     race: {
         type: DataTypes.STRING,
         allowNull: false,
